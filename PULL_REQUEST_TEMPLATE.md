@@ -39,14 +39,12 @@ HTTP/1.1 201 OK
 
 ## Testing
 
-Description of how to test code...
-
-- [ ] Run migrations
+- [ ] Run migrations and seed database
+	- use `./seed_data.sh` from project root
 - [ ] Run test suite
-- [ ] Seed database
+	- use `python3 manage.py test` from project root
 
 
 ## Related Issues
 
-- Fixes #85
-- Fixes #22
+- Fixes #
