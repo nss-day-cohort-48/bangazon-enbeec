@@ -356,13 +356,23 @@ class ProfileProductSerializer(serializers.ModelSerializer):
 
 
 class RecommenderSerializer(serializers.ModelSerializer):
-    """JSON serializer for recommendations"""
+    """JSON serializer for recommendations made by the current user"""
     customer = CustomerSerializer()
     product = ProfileProductSerializer()
 
     class Meta:
         model = Recommendation
         fields = ('product', 'customer',)
+
+
+class RecommendeeSerializer(serializers.ModelSerializer):
+    """JSON serializer for recommendations made for the current user"""
+    recommender = CustomerSerializer()
+    product = ProfileProductSerializer()
+
+    class Meta:
+        model = Recommendation
+        fields = ('product', 'recommender',)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -373,7 +383,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     """
     user = UserSerializer(many=False)
     recommends = RecommenderSerializer(many=True)
-    recommendations = RecommenderSerializer(many=True)
+    recommendations = RecommendeeSerializer(many=True)
 
     class Meta:
         model = Customer
