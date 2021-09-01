@@ -1,4 +1,5 @@
-class Connection
+"""Module to enable connecting to the database"""
 
 
-db_path = "/home/val/workspace/bangazon-enbeec/db.sqlite3
+class Connection:
+    db_path = "/home/val/workspace/bangazon-enbeec/db.sqlite3"
