@@ -1,28 +1,29 @@
 import sqlite3
 from django.shortcuts import render
+from bangazonreports.views import Connection
 
 
-def favesellers_list(request):
+def customer_fave_sellers(request):
     """Function to create an HTML report about which sellers are user favorites"""
     if request.method == 'GET':
-        with sqlite.connect(Connection.db_path) as conn:
+        with sqlite3.connect(Connection.db_path) as conn:
             conn.row_factory = sqlite3.Row
             db_cursor = conn.cursor()
             select_fave_sellers = """
-                SELECT  user.first_name || ' ' || user.last_name AS seller_name
+                SELECT  user.first_name || ' ' || user.last_name AS seller_name,
+                        fav.seller_id AS seller_id
                 FROM    bangazonapi_favorite AS fav
                 JOIN    bangazonapi_customer AS cust ON cust.id=fav.seller_id
                 JOIN    auth_user AS user ON cust.user_id=user.id
             """
             db_cursor.execute("""
-                SELECT  user.first_name || '' || user.last_name AS customer_name,
+                SELECT  user.first_name || ' ' || user.last_name AS customer_name,
                         fave_sellers.seller_name AS seller_name
                 FROM    bangazonapi_favorite AS fav
                 JOIN    bangazonapi_customer AS cust ON cust.id=fav.customer_id
                 JOIN    auth_user AS user ON cust.user_id=user.id
                 JOIN    (""" + select_fave_sellers + """) AS fave_sellers
-                            ON fav.seller_id=fave_sellers.seller_id
-            """)
+                            ON fav.seller_id=fave_sellers.seller_id;""")
 
             dataset = db_cursor.fetchall()
 
@@ -47,7 +48,7 @@ def favesellers_list(request):
             # since we already have a name in each dict, we don't need the top level keys
             customer_list = customers.values()
 
-            template = "users/customer_fave_sellers.html"
+            template = "favorites/customer_fave_sellers.html"
             context = {
                 "customers_with_fave_sellers": customer_list
             }
