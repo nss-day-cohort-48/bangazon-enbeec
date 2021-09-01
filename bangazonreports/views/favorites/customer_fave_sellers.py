@@ -25,20 +25,24 @@ def favesellers_list(request):
             """)
 
             dataset = db_cursor.fetchall()
+
             customers = {}
             # iterate through each favorite
             for row in dataset:
+                customer_name = row["customer_name"]
+                seller_name = row["seller_name"]
+
                 # each customer gets a dict in the customers dict
-                if row["customer_name"] not in customers:
+                if customer_name not in customers:
                     # each customer dict contains a "favorite_sellers" list
-                    customers[row["customer_name"]= {
-                        "name": row["customer_name"],
-                        "favorite_sellers": [row["seller_name"]]
+                    customers[customer_name] = {
+                        "name": customer_name,
+                        "favorite_sellers": [seller_name]
                     }
                 else:
                     # if the customer's dict exists, just add to the faves list
-                    customers[row["customer_name"]]["favorite_sellers"].append(
-                        row["seller_name"])
+                    customers[customer_name]["favorite_sellers"].append(
+                        seller_name)
 
             # since we already have a name in each dict, we don't need the top level keys
             customer_list = customers.values()
