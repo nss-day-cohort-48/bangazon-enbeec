@@ -17,7 +17,6 @@ class PaymentTests(APITestCase):
         self.token = json_response["token"]
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
     def test_create_payment_type(self):
         """
         Ensure we can add a payment type for a customer.
@@ -38,6 +37,20 @@ class PaymentTests(APITestCase):
         self.assertEqual(json_response["merchant_name"], "American Express")
         self.assertEqual(json_response["account_number"], "111-1111-1111")
         self.assertEqual(json_response["expiration_date"], "2024-12-31")
-        self.assertEqual(json_response["create_date"], str(datetime.date.today()))
+        self.assertEqual(
+            json_response["create_date"], str(datetime.date.today()))
 
-    # TODO: Delete payment type
+    def test_delete_payment_type(self):
+        """
+        Ensure we can delete a payment type
+        """
+        # Create a payment to delete
+        self.test_create_payment_type()
+
+        # Do the deletion
+        url = "/paymenttypes/1"
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        response = self.client.delete(url)
+
+        # Test the result
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
