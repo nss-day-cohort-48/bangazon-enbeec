@@ -204,6 +204,12 @@ class Profile(ViewSet):
             @apiHeaderExample {String} Authorization
                 Token 9ba45f09651c5b0c404f37a2d2572c026c146611
 
+            @apiParam {id} product_id Product Id to add product to current order
+            @apiParamExample {json} Input
+                {
+                    "product_id": 35
+                }
+
             @apiSuccess (200) {Object} line_item Line items in cart
             @apiSuccess (200) {Number} line_item.id Line item id
             @apiSuccess (200) {Object} line_item.product Product in cart
@@ -236,8 +242,8 @@ class Profile(ViewSet):
             """
 
             try:
-                open_order = Order.objects.get(customer=current_user)
-                print(open_order)
+                open_order = Order.objects.get(
+                    customer=current_user, payment_type=None)
             except Order.DoesNotExist as ex:
                 open_order = Order()
                 open_order.created_date = datetime.datetime.now()
