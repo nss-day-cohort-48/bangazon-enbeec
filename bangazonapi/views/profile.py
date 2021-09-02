@@ -204,6 +204,12 @@ class Profile(ViewSet):
             @apiHeaderExample {String} Authorization
                 Token 9ba45f09651c5b0c404f37a2d2572c026c146611
 
+            @apiParam {id} product_id Product Id to add product to current order
+            @apiParamExample {json} Input
+                {
+                    "product_id": 35
+                }
+
             @apiSuccess (200) {Object} line_item Line items in cart
             @apiSuccess (200) {Number} line_item.id Line item id
             @apiSuccess (200) {Object} line_item.product Product in cart
