@@ -334,10 +334,30 @@ class Profile(ViewSet):
                     "seller": 35
                 }
 
-            @apiSuccess (204) 
+            @apiSuccess (201) 
 
-            @apiError (404) {String} message  Not found message
+            @apiError (400) {String} message favorite seller exists
             """
+            customer = Customer.objects.get(user=request.auth.user)
+            seller = Customer.objects.get(pk=request.data["seller"])
+
+            try:
+                existing_favorite = Favorite.objects.get(
+                    seller__id=request.data["seller"])
+                return Response(
+                    "favorite seller exists", status=status.HTTP_400_BAD_REQUEST)
+
+            except Favorite.DoesNotExist as ex:
+                favorite_seller = Favorite()
+                favorite_seller.customer = customer
+                favorite_seller.seller = seller
+                favorite_seller.save()
+                favorite_seller_json = FavoriteSerializer(
+                    favorite_seller, many=False, context={'request': request})
+
+                return Response(favorite_seller_json.data, status=status.HTTP_201_CREATED)
+
+        return Response({}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class LineItemSerializer(serializers.HyperlinkedModelSerializer):
