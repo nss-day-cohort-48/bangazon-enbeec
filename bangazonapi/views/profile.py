@@ -331,10 +331,25 @@ class Profile(ViewSet):
             @apiParam {id} seller Customer id of the seller to favorite
             @apiParamExample {json} Input
                 {
-                    "seller": 35
+                    "seller": 4
                 }
 
-            @apiSuccess (201) 
+            @apiSuccess (201) {Object} favorite_seller New favorite seller
+            @apiSuccess (201) {Number} favorite_seller.id Favorite seller id
+            @apiSuccess (201) {Object} favorite_seller.seller Favorite seller's customer entry
+            @apiSuccessExample {json} Success
+            {
+                "id": 4,
+                "seller": {
+                    "id": 4,
+                    "url": "http://localhost:8000/customers/4",
+                    "user": {
+                        "first_name": "Steve",
+                        "last_name": "Brownlee",
+                        "username": "steve"
+                    }
+                }
+            }
 
             @apiError (400) {String} message favorite seller exists
             """
