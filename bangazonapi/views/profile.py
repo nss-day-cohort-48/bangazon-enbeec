@@ -318,6 +318,26 @@ class Profile(ViewSet):
             serializer = FavoriteSerializer(
                 favorites, many=True, context={'request': request})
             return Response(serializer.data)
+        if request.method == "POST":
+            """
+            @api {POST} /profile/favesellers POST new favorite seller
+            @apiName AddToFavoriteSellers
+            @apiGroup UserProfile
+
+            @apiHeader {String} Authorization Auth token
+            @apiHeaderExample {String} Authorization
+                Token 9ba45f09651c5b0c404f37a2d2572c026c146611
+
+            @apiParam {id} seller Customer id of the seller to favorite
+            @apiParamExample {json} Input
+                {
+                    "seller": 35
+                }
+
+            @apiSuccess (204) 
+
+            @apiError (404) {String} message  Not found message
+            """
 
 
 class LineItemSerializer(serializers.HyperlinkedModelSerializer):
