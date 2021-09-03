@@ -110,4 +110,18 @@ class ProductTests(APITestCase):
         # make sure it results in the proper status code
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    # TODO: Product can be rated. Assert average rating exists.
+    def test_product_average_rating_exists(self):
+        """
+        Ensure that products have an average rating
+        """
+        # create a product
+        self.test_create_product()
+
+        # get that product
+        url = "/products/1"
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
+        response = self.client.get(url, None, format='json')
+        json_response = json.loads(response.content)
+
+        # check for the average rating
+        self.assertIsNotNone(json_response["average_rating"])
